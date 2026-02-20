@@ -4,9 +4,57 @@
 
 MAVROS adalah sebuah paket ROS (Robot Operating System) yang berfungsi sebagai jembatan komunikasi antara sistem operasi robot (ROS) dengan autopilot berbasis protokol MAVLink, seperti PX4 atau ArduPilot. Dengan MAVROS, pengguna dapat mengontrol, memonitor, dan mengintegrasikan drone atau kendaraan otonom lain ke dalam ekosistem ROS dengan mudah.
 
-## How to Install MAVROS 
-untuk install mavros bisa lewat sini
-[Install Mavros](https://docs.ros.org/en/humble/p/mavros/)
+## Cara Menginstal MAVROS
+Panduan resmi MAVROS (contoh untuk ROS 2 Humble) tersedia di
+[Install Mavros](https://docs.ros.org/en/humble/p/mavros/).
+
+Di bawah ini ringkasan singkat cara memasang MAVROS pada beberapa distribusi ROS yang sering digunakan.
+
+- **ROS 2 — Humble (Ubuntu 22.04)**
+	- Cara singkat (paket biner bila tersedia) atau dari source di workspace:
+		```bash
+		# via apt (jika paket tersedia untuk distro Anda)
+		sudo apt update
+		sudo apt install ros-humble-mavros ros-humble-mavros-extras
+
+		# atau: build dari source di workspace ROS2
+		source /opt/ros/humble/setup.bash
+		cd ~/ros2_ws/src
+		git clone https://github.com/mavlink/mavros.git
+		cd ~/ros2_ws
+		rosdep update
+		rosdep install --from-paths src --ignore-src -r -y
+		colcon build
+		source install/setup.bash
+		```
+
+- **ROS 2 — Foxy (Ubuntu 20.04)**
+	- Catatan: Foxy menggunakan API ROS 2 yang lebih tua; beberapa nama topic/service bisa berbeda. Jika paket biner `ros-foxy-mavros` tidak tersedia, rekomendasi build dari source:
+		```bash
+		source /opt/ros/foxy/setup.bash
+		mkdir -p ~/ros2_foxy_ws/src && cd ~/ros2_foxy_ws/src
+		git clone https://github.com/mavlink/mavros.git
+		cd ~/ros2_foxy_ws
+		rosdep update
+		rosdep install --from-paths src --ignore-src -r -y
+		colcon build
+		source install/setup.bash
+		```
+
+- **ROS 1 — Noetic (Ubuntu 20.04)**
+	- Catatan: Noetic adalah ROS 1 dan menggunakan `catkin`. Untuk integrasi ROS1↔ROS2, gunakan `ros1_bridge`.
+		```bash
+		sudo apt update
+		sudo apt install ros-noetic-mavros ros-noetic-mavros-extras
+		sudo apt install python3-rosdep python3-rosinstall-generator
+		sudo rosdep init || true
+		rosdep update
+
+		# Beberapa fitur MAVROS memerlukan data GeographicLib
+		sudo apt install geographiclib-tools
+		# Untuk instruksi lengkap pemasangan data GeographicLib, lihat dokumentasi MAVROS
+		```
+
 
 
 
@@ -42,47 +90,6 @@ Berikut beberapa contoh command MAVROS yang umum digunakan pada drone:
 		 # PX4
 		 ros2 service call /mavros/set_mode mavros_msgs/srv/SetMode '{custom_mode: "OFFBOARD"}'
 		## Supported ROS distributions
-
-		This repository is primarily demonstrated using ROS 2 Humble. Below are concise notes for using the code with ROS 2 Foxy and ROS 1 Noetic.
-
-		- **ROS 2 — Humble (recommended)**:
-			- Platform: Ubuntu 22.04
-			- Quick setup:
-				```bash
-				source /opt/ros/humble/setup.bash
-				rosdep update
-				rosdep install --from-paths src --ignore-src -r -y
-				colcon build
-				source install/setup.bash
-				```
-
-		- **ROS 2 — Foxy**:
-			- Platform: Ubuntu 20.04
-			- Notes: Foxy uses an older ROS 2 API; some packages or topic/service names may differ. Typical build steps:
-				```bash
-				source /opt/ros/foxy/setup.bash
-				rosdep update
-				rosdep install --from-paths src --ignore-src -r -y
-				colcon build
-				source install/setup.bash
-				```
-
-		- **ROS 1 — Noetic**:
-			- Platform: Ubuntu 20.04
-			- Notes: Noetic is ROS 1 — it uses `catkin` instead of `colcon`. Integration between ROS 1 and ROS 2 requires `ros1_bridge` or other compatibility layers.
-			- Typical setup for building ROS 1 packages:
-				```bash
-				source /opt/ros/noetic/setup.bash
-				rosdep update
-				rosdep install --from-paths src --ignore-src -r -y
-				catkin_make
-				source devel/setup.bash
-				```
-
-		If you want, I can:
-		- add separate branches or folders for `foxy` and `noetic` compatibility changes;
-		- add CI or notes detailing required package-version changes; or
-		- create a `.github/ISSUE_TEMPLATE.md` to collect compatibility tasks.
 
 		```
 
