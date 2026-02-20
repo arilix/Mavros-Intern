@@ -1,4 +1,4 @@
-# Magang Divisi VTOL — MAVROS
+# Divisi VTOL — MAVROS
 
 ## Apa itu MAVROS?
 
