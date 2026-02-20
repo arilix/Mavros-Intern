@@ -41,7 +41,50 @@ Berikut beberapa contoh command MAVROS yang umum digunakan pada drone:
 		 ros2 service call /mavros/set_mode mavros_msgs/srv/SetMode '{custom_mode: "GUIDED"}'
 		 # PX4
 		 ros2 service call /mavros/set_mode mavros_msgs/srv/SetMode '{custom_mode: "OFFBOARD"}'
-		 ```
+		## Supported ROS distributions
+
+		This repository is primarily demonstrated using ROS 2 Humble. Below are concise notes for using the code with ROS 2 Foxy and ROS 1 Noetic.
+
+		- **ROS 2 — Humble (recommended)**:
+			- Platform: Ubuntu 22.04
+			- Quick setup:
+				```bash
+				source /opt/ros/humble/setup.bash
+				rosdep update
+				rosdep install --from-paths src --ignore-src -r -y
+				colcon build
+				source install/setup.bash
+				```
+
+		- **ROS 2 — Foxy**:
+			- Platform: Ubuntu 20.04
+			- Notes: Foxy uses an older ROS 2 API; some packages or topic/service names may differ. Typical build steps:
+				```bash
+				source /opt/ros/foxy/setup.bash
+				rosdep update
+				rosdep install --from-paths src --ignore-src -r -y
+				colcon build
+				source install/setup.bash
+				```
+
+		- **ROS 1 — Noetic**:
+			- Platform: Ubuntu 20.04
+			- Notes: Noetic is ROS 1 — it uses `catkin` instead of `colcon`. Integration between ROS 1 and ROS 2 requires `ros1_bridge` or other compatibility layers.
+			- Typical setup for building ROS 1 packages:
+				```bash
+				source /opt/ros/noetic/setup.bash
+				rosdep update
+				rosdep install --from-paths src --ignore-src -r -y
+				catkin_make
+				source devel/setup.bash
+				```
+
+		If you want, I can:
+		- add separate branches or folders for `foxy` and `noetic` compatibility changes;
+		- add CI or notes detailing required package-version changes; or
+		- create a `.github/ISSUE_TEMPLATE.md` to collect compatibility tasks.
+
+		```
 
 2. **Arming**
 	 - Mengaktifkan (arming) motor drone:
